@@ -42,49 +42,16 @@ export default function Watch() {
 
   const playerContainerRef = useRef<HTMLDivElement>(null)
 
-  // Vidking Progress Tracking Integration
+  // Auto-fullscreen on mount for Android TV
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      try {
-        const payload = typeof event.data === 'string' ? JSON.parse(event.data) : event.data
-        if (payload?.type === 'PLAYER_EVENT') {
-          const { event: eventName, currentTime, progress } = payload.data
-          console.log(`[Vidking] ${eventName}: ${currentTime}s (${progress}%)`)
-          
-          // Save progress locally for "Continue Watching"
-          if (eventName === 'timeupdate' || eventName === 'pause') {
-            const history = JSON.parse(localStorage.getItem('snap_watch_history') || '{}')
-            history[mediaId] = {
-              timestamp: Date.now(),
-              currentTime,
-              progress,
-              mediaType,
-              season,
-              episode,
-              title,
-              image: poster
-            }
-            localStorage.setItem('snap_watch_history', JSON.stringify(history))
-          }
-        }
-      } catch (e) {
-        // Not a Vidking event or malformed JSON
-      }
-    }
-
-    window.addEventListener("message", handleMessage)
-    return () => window.removeEventListener("message", handleMessage)
-  }, [mediaId, mediaType, season, episode, title, poster])
-
-  const handleFullscreen = () => {
-    const container = playerContainerRef.current
-    if (!container) return
-    if (!document.fullscreenElement) {
-      container.requestFullscreen().catch(err => console.error(err))
-    } else {
-      document.exitFullscreen()
-    }
-  }
+    const timer = setTimeout(() => {
+       const container = playerContainerRef.current
+       if (container && !document.fullscreenElement) {
+         container.requestFullscreen().catch(err => console.error("Auto-fullscreen failed", err))
+       }
+    }, 500) // Delay to ensure DOM is ready
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const handleFs = () => setFullscreen(!!document.fullscreenElement)
@@ -95,19 +62,25 @@ export default function Watch() {
   // Android TV Global Key Catchers
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-       if (e.key === 'Backspace' || e.keyCode === 4) {
-          if (fullscreen) {
+       if (e.key === 'Backspace' || e.key === 'Escape' || e.keyCode === 4) {
+          if (document.fullscreenElement) {
              document.exitFullscreen()
-             e.preventDefault()
-          } else {
-             navigate(-1)
-             e.preventDefault()
           }
+          navigate(-1) // Always go back on Backspace/Escape for TV interface
+          e.preventDefault()
        }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [fullscreen, navigate])
+  }, [navigate])
+
+  if (fullscreen) {
+    return (
+       <div className="fixed inset-0 z-[9999] bg-black m-0" ref={playerContainerRef}>
+          <PlayerWrapper embedUrl={embedUrl} title={title} />
+       </div>
+    )
+  }
 
   return (
     <div className="relative min-h-screen bg-black text-white">

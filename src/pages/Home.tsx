@@ -189,7 +189,7 @@ export default function Home({ mediaType: initialMediaType = 'video' }: HomeProp
       </AnimatePresence>
 
       {/* Immersive Header / Trailer Area */}
-      <div className="absolute inset-x-0 top-0 h-[65vh] pointer-events-none overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-[70vh] pointer-events-none overflow-hidden">
          <AnimatePresence mode="wait">
             <motion.div 
               key={focusedItemDetails?.id || 'idle'}
@@ -199,35 +199,36 @@ export default function Home({ mediaType: initialMediaType = 'video' }: HomeProp
                {trailerKey && !drawerOpen ? (
                  <iframe 
                     src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerKey}&rel=0`}
-                    className="w-[120%] h-[120%] -translate-x-[10%] -translate-y-[10%] scale-110 opacity-40 blur-[2px]"
+                    className="w-[120%] h-[120%] -translate-x-[10%] -translate-y-[10%] scale-110 opacity-70 blur-[1px]"
                     allow="autoplay"
                  />
                ) : (
                  <img 
                     src={focusedItemDetails?.backdrop_path ? `https://image.tmdb.org/t/p/original${focusedItemDetails.backdrop_path}` : 'https://picsum.photos/1920/1080?grayscale'}
-                    className="w-full h-full object-cover opacity-30 scale-105"
+                    className="w-full h-full object-cover opacity-70 scale-105"
                  />
                )}
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/20 to-transparent" />
+               {/* Stronger Cinematic Scrim */}
+               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
             </motion.div>
          </AnimatePresence>
 
-         <div className="absolute bottom-20 left-12 max-w-2xl space-y-4">
+         <div className="absolute bottom-16 left-12 max-w-3xl space-y-4 z-10">
             <motion.div 
                key={focusedItemDetails?.id}
                initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-               className="space-y-4"
+               className="space-y-3"
             >
-               <h1 className="text-6xl font-black uppercase tracking-tighter leading-none">{focusedItemDetails?.title || focusedItemDetails?.name || 'SnapStream'}</h1>
-               <div className="flex items-center gap-4 text-xs font-black text-[#00f3ff] uppercase tracking-widest opacity-80">
+               <h1 className="text-5xl font-black uppercase tracking-tighter leading-tight drop-shadow-2xl">{focusedItemDetails?.title || focusedItemDetails?.name || 'SnapStream'}</h1>
+               <div className="flex items-center gap-4 text-xs font-black text-[#00f3ff] uppercase tracking-widest drop-shadow-md">
                   <span>{focusedItemDetails?.release_date?.slice(0, 4) || focusedItemDetails?.first_air_date?.slice(0, 4) || '2026'}</span>
-                  <div className="w-1 h-1 bg-[#00f3ff] rounded-full" />
+                  <div className="w-1.5 h-1.5 bg-[#00f3ff] rounded-full" />
                   <span>{mediaType === 'livetv' ? 'Live Stream' : (focusedItemDetails?.media_type || 'Content')}</span>
-                  <div className="w-1 h-1 bg-[#00f3ff] rounded-full" />
-                  <span className="px-2 py-0.5 rounded border border-[#00f3ff]/40 bg-[#00f3ff]/10">U/A 13+</span>
+                  <div className="w-1.5 h-1.5 bg-[#00f3ff] rounded-full" />
+                  <span className="px-2 py-0.5 rounded border border-[#00f3ff]/40 bg-[#00f3ff]/20 text-white">U/A 13+</span>
                </div>
-               <p className="text-zinc-400 text-lg font-medium leading-relaxed line-clamp-3">
+               <p className="text-zinc-300 text-base font-medium leading-relaxed max-w-2xl line-clamp-3 drop-shadow-lg">
                   {focusedItemDetails?.overview || 'Explore the ultimate collection of premium movies, TV shows, and live channels optimized for your big screen.'}
                </p>
             </motion.div>
