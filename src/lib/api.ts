@@ -51,7 +51,7 @@ export interface TMDBMovieDetails extends TMDBMovie {
     cast: { id: number; name: string; character: string; profile_path: string | null }[]
   }
   videos: {
-    results: { key: string; site: string; type: string }[]
+    results: { key: string; site: string; type: string; name: string }[]
   }
 }
 
@@ -72,9 +72,15 @@ export interface TMDBPaginated<T> {
   total_results: number
 }
 
+export interface TMDBVideosResponse {
+  id: number
+  results: { key: string; site: string; type: string; name: string; official: boolean }[]
+}
+
 export const tmdb = {
   fetch: <T>(endpoint: string, params?: Record<string, string>) =>
     tmdbFetch<T>(`/${endpoint.replace(/^\//, '')}`, params ?? {}),
+
   trending: (page = 1) =>
     tmdbFetch<TMDBPaginated<TMDBMovie & TMDBShow>>('/trending/all/week', { page: String(page) }),
 
@@ -104,6 +110,10 @@ export const tmdb = {
       with_genres: String(genreId),
       page: String(page),
     }),
+
+  // ── FIX: was missing, caused runtime crash in Home.tsx ──
+  getVideos: (id: number, type: 'movie' | 'tv') =>
+    tmdbFetch<TMDBVideosResponse>(`/${type}/${id}/videos`),
 }
 
 export function imgUrl(path: string | null, size: 'w500' | 'original' | 'w300' | 'w780' = 'w500') {
