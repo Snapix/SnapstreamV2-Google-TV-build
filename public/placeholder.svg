@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="750" viewBox="0 0 500 750" fill="none">
+  <rect width="500" height="750" fill="#141420"/>
+  <path d="M250 300l60 90-60 90-60-90 60-90z" fill="#00f3ff" opacity="0.3"/>
+  <path d="M200 360l100-60M200 420l100 60" stroke="#00f3ff" stroke-width="2" opacity="0.2"/>
+  <text x="250" y="500" text-anchor="middle" font-family="Inter" font-size="14" fill="#555">SnapStream</text>
+</svg>

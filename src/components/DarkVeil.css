@@ -1,0 +1,4 @@
+.dark-veil-canvas {
+  pointer-events: none;
+  z-index: 0;
+}
