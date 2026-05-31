@@ -228,11 +228,11 @@ export default function Home({ mediaType: mediaProp = 'video' }: HomeProps) {
               onClick={() => setDrawerOpen(false)}
             />
             <motion.div
-              initial={{ x: -320 }}
+              initial={{ x: -360 }}
               animate={{ x: 0 }}
-              exit={{ x: -320 }}
+              exit={{ x: -360 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="absolute inset-y-0 left-0 z-[100] w-[280px] bg-zinc-950/98 backdrop-blur-2xl border-r border-white/10 p-10 flex flex-col gap-8 shadow-[50px_0_100px_rgba(0,0,0,0.9)]"
+              className="absolute inset-y-0 left-0 z-[100] w-[320px] bg-zinc-950/98 backdrop-blur-2xl border-r border-white/10 p-10 flex flex-col gap-8 shadow-[50px_0_100px_rgba(0,0,0,0.9)]"
             >
               <div>
                 <h1 className="font-display text-2xl font-black tracking-tighter text-[#00f3ff]">SNAPSTREAM</h1>
@@ -400,7 +400,7 @@ export default function Home({ mediaType: mediaProp = 'video' }: HomeProps) {
                               ? 'border-[#00f3ff] shadow-[0_0_50px_rgba(0,243,255,0.5)]'
                               : 'border-transparent shadow-xl bg-zinc-950'
                           }`}
-                          style={{ width: 320, aspectRatio: '16/9' }}
+                          style={{ width: 360, aspectRatio: '16/9' }}
                         >
                           {image ? (
                             <img
